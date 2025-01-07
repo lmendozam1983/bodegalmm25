@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% include "menu.html" %}
+<div class="container my-5">
+    <h1 class="text-center mb-4 text-success fw-bold">Agregar Stock de Producto: {{ producto.nombre }}</h1>
+
+    <!-- Formulario para agregar stock -->
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="cantidad" class="form-label"><b>Cantidad a agregar:</b></label>
+            <input type="number" name="cantidad" id="cantidad" class="form-control" required min="1">
+        </div>
+        <button type="submit" class="btn btn-success rounded-pill"><b>Agregar Stock</b></button>
+    </form>
+
+    <div class="mt-3">
+        <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-info rounded-pill"><b>Volver al detalle del producto</b></a>
+    </div>
+</div>
+{% include "footer.html" %}
+{% endblock %}

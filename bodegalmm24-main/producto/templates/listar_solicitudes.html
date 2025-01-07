@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "menu.html" %}
+
+<div class="container mt-5">
+    <h1 class="text-center text-success  mb-4">Listado de <b>Solicitudes</b></h1>
+
+    {% if user.is_staff %}
+        <table class="table table-striped table-hover">
+            <thead class="table-success">
+                <tr>
+                    <th><b>Producto</b></th>
+                    <th><b>Usuario</b></th>
+                    <th><b>Mensaje</b></th>
+                    <th><b>Estado</b></th>
+                    <th><b>Acciones</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for solicitud in page_obj %}
+                    <tr>
+                        <td>{{ solicitud.producto.nombre }}</td>
+                        <td>{{ solicitud.usuario.username }}</td>
+                        <td>{{ solicitud.mensaje }}</td>
+                        <td>{{ solicitud.estado }}</td>
+                        <td>
+                            <a href="{% url 'aprobar_solicitud' solicitud.id %}" class="btn btn-success fs-7 py-2 px-2 rounded-pill"><b>Aprobar</b></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <div>
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="btn btn-outline-secondary btn-sm">&laquo; Primero</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-secondary btn-sm">Anterior</a>
+                {% endif %}
+            </div>
+
+            <span class="text-muted">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+
+            <div>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-secondary btn-sm">Siguiente</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-secondary btn-sm">Último &raquo;</a>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-4">
+            <p>No tienes permisos para ver las solicitudes.</p>
+        </div>
+    {% endif %}
+</div>
+
+{% include "footer.html" %}
+
+{% endblock %}
+

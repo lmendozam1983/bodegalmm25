@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% include "menu.html" %}
+    <div class="container mt-5">
+        <h1 class="text-center">Editar Dispositivo</h1>
+        <form method="post" class="needs-validation">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+            <a href="{% url 'listado' %}" class="btn btn-secondary mt-3">Cancelar</a>
+        </form>
+    </div>
+    {% include "footer.html" %}
+    {% endblock %}
+</body>
+</html>

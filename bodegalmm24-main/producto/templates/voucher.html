@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include "menu.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voucher</title>
+    <style>
+        #voucher {
+            font-family: Arial, sans-serif;
+            margin: 100px;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="voucher" class="mt-5">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <h2 style="margin-right: 10px;">Voucher Pañol</h2>
+                <img src="https://www.nocedal.cl/wp/wp-content/uploads/2020/09/x1.jpg" alt="placeholder" style="height: 50px;">
+            </div>
+            <p><strong>Cliente:</strong> {{ usuario.username }}</p>
+            <p><strong>Artículo Prestado:</strong> {{ producto.nombre }}</p>
+            <!--<p><strong>Cantidad:</strong> {{ producto.id }}</p>-->
+            <p><strong>Fecha de Préstamo:</strong> {{ fecha_prestamo|date:"d M, Y" }}</p>
+            <!-- <p><strong>Fecha de Devolución:</strong> {{ prestamo.fecha_devolucion|date:"d M, Y" }}</p> -->
+            <p><strong>Firmado por:</strong> {{ user.username }}</p>
+        </div>
+    </div>
+    
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>
+    <body>
+    {% include "footer.html" %}
+    {% endblock %}
+</html>

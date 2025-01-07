@@ -1,0 +1,74 @@
+{% extends 'base.html' %} 
+{% load bootstrap5 %} 
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+    <title>Agregar vehículo</title>
+</head>
+
+<body>
+
+    {% include "menu.html" %}
+    <div class="container">
+        <div class="container mt-5">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white text-center">
+                    <h2>Registrar <b>Dispositivo</b></h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if user.is_authenticated and perms.dispositivo.editar_prestamo %}
+                        <div class="mb-3">
+                            <label for="id_marca" class="form-label text-success font-weight-bold">Nombre</label>
+                            {{ form.nombre }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_marca" class="form-label text-success font-weight-bold">Precio</label>
+                            {{ form.precio}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_marca" class="form-label text-success font-weight-bold">Descripción</label>
+                            {{ form.descripcion }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_stock" class="form-label text-success font-weight-bold">Stock</label>
+                            <input type="text" name="stock" id="id_stock" class="form-control" value="{{ form.stock.value }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_serial" class="form-label text-success font-weight-bold">Serie</label>
+                            <input type="text" name="serial" id="id_serial" class="form-control" value="{{ form.serial.value }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_estado" class="form-label text-success font-weight-bold">Estado</label>
+                            <select name="estado" id="id_estado" class="form-control">
+                                {% for option in form.estado.field.choices %}
+                                    <option value="{{ option.0 }}" {% if option.0 == form.estado.value %}selected{% endif %}>
+                                        {{ option.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <br>
+                            <button type="submit" class="btn btn-success btn-lg w-50 rounded-pill">Guardar</button>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+        {% include "footer.html" %}
+    {% endblock content %}
+</body>
+
+</html>

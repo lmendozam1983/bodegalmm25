@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Cuerpo principal del contenido -->
+{% include "menu.html" %}
+{% if user.is_authenticated and perms.dispositivo.editar_prestamo %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Eliminar Préstamo</h2>
+    
+    <div class="alert alert-warning text-center" role="alert">
+        <strong>¡Advertencia!</strong> Estás a punto de eliminar un préstamo.
+    </div>
+
+    <p class="text-center mb-4">¿Estás seguro de que deseas eliminar el préstamo del dispositivo <strong>{{ prestamo.dispositivo.nombre }}</strong> para el usuario <strong>{{ prestamo.usuario.username }}</strong>?</p>
+    
+    <div class="text-center">
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-lg mx-2">Eliminar</button>
+            <a href="{% url 'listado_prestamos' %}" class="btn btn-secondary btn-lg mx-2">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+{% include "footer.html" %}
+{% endblock %}

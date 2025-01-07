@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "menu.html" %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .voucher {
+            font-family: Arial, sans-serif;
+            margin: 100px;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            margin-bottom: 50px;
+            /* Ajusta este valor según lo necesites */
+        }
+
+        footer {
+            margin-top: 50px;
+            /* Asegura que haya espacio entre la tabla y el footer */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4 text-success ">Préstamos del Producto: <b>{{ producto.nombre }}</b></h1>
+
+        <!-- Tabla de préstamos -->
+        <table class="table table-bordered table-striped">
+            <thead class="table-success">
+                <tr>
+                    <th><b>Usuario</b></th>
+                    <th><b>Cliente</b></th>
+                    <th><b>Cantidad</b></th>
+                    <th><b>Fecha de Préstamo</b></th>
+                    <th><b>Generar Voucher</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prestamo in prestamos %}
+                <tr>
+                    <td>{{ prestamo.usuario.username }}</td>
+                    <td>{{ prestamo.usuario_destino }}</td>
+                    <td>{{ prestamo.cantidad }}</td>
+                    <td>{{ prestamo.fecha_prestamo }}</td>
+                    <!-- Cambié el id a una clase para que todos los botones puedan tener el mismo comportamiento -->
+                    <td><button class="generateVoucher btn btn-secondary rounded-pill"><b>Generar Voucher</b></button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center"><b>No hay préstamos para este producto.</b></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+            <!-- Aquí cada 'voucherContent' se mantiene asociado a cada prestamo -->
+            {% for prestamo in prestamos %}
+            <div id="voucherContent_{{ forloop.counter }}" class="voucherContent d-none">
+                <div style="padding: 20px; border: 1px solid #000; width: 300px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <h2 style="margin-right: 10px;">Voucher Pañol</h2>
+                        <img src="https://www.nocedal.cl/wp/wp-content/uploads/2020/09/x1.jpg" alt="placeholder"
+                            style="height: 50px;">
+                    </div>
+                    <p><strong>Cliente:</strong>{{ prestamo.usuario_destino }}</p>
+                    <p><strong>Artículo Prestado:</strong> {{ producto.nombre }}</p>
+                    <p><strong>Cantidad:</strong> {{ prestamo.cantidad }}</p>
+                    <p><strong>Fecha de Préstamo:</strong> {{ prestamo.fecha_prestamo }}</p>
+                    <p><strong>Firmado por:</strong> {{ prestamo.usuario.username }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+            <script>
+                // Obtén todos los botones con la clase 'generateVoucher'
+                var botones = document.querySelectorAll('.generateVoucher');
+
+                botones.forEach(function (boton, index) {
+                    boton.addEventListener('click', function () {
+                        // Obtén el contenido del voucher correspondiente
+                        var voucherContent = document.getElementById('voucherContent_' + (index + 1)).innerHTML;
+
+                        // Abre una nueva ventana para imprimir
+                        var printWindow = window.open('', '', 'height=600,width=800');
+
+                        // Escribe el contenido del voucher y el estilo necesario
+                        printWindow.document.write('<html><head><title>Voucher Pañol</title>');
+                        printWindow.document.write('<style>');
+                        printWindow.document.write('body { font-family: Arial, sans-serif; }');  // Asegura que se usa la fuente que necesitas
+                        printWindow.document.write('h3 { font-family: Arial, sans-serif; }');
+                        printWindow.document.write('p { font-family: Arial, sans-serif; }');
+                        printWindow.document.write('</style></head><body>');
+                        printWindow.document.write(voucherContent);
+                        printWindow.document.write('</body></html>');
+
+                        // Cierra el documento y lanza la impresión
+                        printWindow.document.close();
+                        printWindow.print();
+                    });
+                });
+
+            </script>
+    </div>
+
+
+    {% endblock %}
+</body>
+
+</html>

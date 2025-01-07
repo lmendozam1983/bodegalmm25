@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% include "menu.html" %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4 text-success">Listado de <b>Préstamos</b></h1>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-success">
+                <tr>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Dispositivo</th>
+                    <th scope="col">Serial</th>
+                    <th scope="col">Fecha de Préstamo</th>
+                    <th scope="col">Eliminar Préstamo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prestamo in prestamos %}
+                <tr>
+                    <td>{{ prestamo.usuario.username }}</td>
+                    <td>{{ prestamo.dispositivo.nombre }}</td>
+                    <td>{{ prestamo.dispositivo.serial }}</td>
+                    <td>{{ prestamo.fecha_prestamo|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {% if user.is_authenticated and perms.dispositivo.editar_prestamo %}
+                        <!-- Botón de eliminar con enlace a la vista de eliminación -->
+                        <a href="{% url 'eliminar_prestamos' prestamo_id=prestamo.id %}" class="btn btn-danger rounded-pill" onclick="return confirm('¿Estás seguro de que deseas eliminar este préstamo?');">
+                            Eliminar
+                        </a>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No hay préstamos registrados</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% include "footer.html" %}
+{% endblock %}

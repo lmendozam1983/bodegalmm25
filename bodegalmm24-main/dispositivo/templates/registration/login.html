@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% block content %} 
+{% load crispy_forms_tags %} 
+{% load bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% include "menu.html" %}
+    <div class="container py-5">
+        <h1>Ingresar sesión</h1>
+        <form method="POST"> 
+            {% csrf_token %} 
+            {{ login_form|crispy }} 
+            <button class="btn btn-primary"type="submit">Ingresar</button> </form>
+        <p class="text-center">Si no tienes una cuenta, registrate, <a href="/dispositivo/templates/registration/registro"> para crear una cuenta</a>.</p>
+    </div> 
+    {% include "footer.html" %}
+    {% endblock content %}
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "menu.html" %}
+
+<div class="container mt-5">
+    <!-- Título de la página -->
+    <h2 class="text-center text-success mb-4">Solicitar <b>Producto:</b></h2>
+
+    <!-- Card para el formulario -->
+       
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="producto" class="form-label">Producto</label>
+                {{ form.producto }}
+            </div>
+            
+            <div class="mb-3">
+                <label for="mensaje" class="form-label">Motivo de la Solicitud</label>
+                {{ form.mensaje }}
+            </div>
+    
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-4 py-2 rounded-pill">Enviar Solicitud</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Botón para volver -->
+    <div class="text-center mt-4">
+        <a href="{% url 'lista_productos' %}" class="btn btn-outline-secondary btn-lg px-4 py-2 rounded-pill"><b>Volver a la lista de productos</b></a>
+    </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}
+
+

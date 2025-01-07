@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% include "menu.html" %}
+<div class="container mt-5">
+    <h1 class="text-center text-success">Crear <b>Producto</b></h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="nombre" class="form-label"><b>Nombre</b></label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
+        <div class="mb-3">
+            <label for="cantidad" class="form-label"><b>Cantidad</b></label>
+            <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+        </div>
+        <div class="mb-3">
+            <label for="bodega" class="form-label"><b>Bodega</b></label>
+            <select class="form-control" id="bodega" name="bodega" required>
+                {% for bodega in bodegas %}
+                <option value="{{ bodega.id }}">{{ bodega.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="precio_unitario" class="form-label"><b>Precio Unitario</b></label>
+            <input type="number" step="0.01" class="form-control" id="precio_unitario" name="precio_unitario" required>
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label"><b>Descripción</b></label>
+            <textarea class="form-control" id="descripcion" name="descripcion"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success rounded-pill"><b>Guardar</b></button>
+    </form>
+</div>
+{% include "footer.html" %}
+{% endblock %}

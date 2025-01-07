@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Producto</title>
+</head>
+<body>
+    {% include "menu.html" %}
+    
+    <!-- Contenedor principal -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <!-- Tarjeta para mostrar el producto -->
+                <div class="card">
+                    <div class="card-header text-center bg-success text-white">
+                        <h3>{{ producto.nombre }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Tabla con detalles del producto -->
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col"><b>Detalles</b></th>
+                                    <th scope="col"><b>Cantidad y descripción</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Cantidad disponible:</strong></td>
+                                    <td><b>{{ producto.cantidad }}</b></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Precio unitario:</strong></td>
+                                    <td>${{ producto.precio_unitario }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Descripción:</strong></td>
+                                    <td>{{ producto.descripcion }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Enlace para ver los préstamos -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'prestamos_producto' producto.id %}" class="btn btn-success rounded-pill"><b>Ver préstamos</b></a>
+                            <a href="{% url 'agregar_stock' producto.id %}" class="btn btn-dark rounded-pill"><b>Agregar stock</b></a>
+                            <a href="{% url 'lista_productos' %}" class="btn btn-info rounded-pill"><b>Volver al listado de productos</b></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "footer.html" %}
+</body>
+</html>
+{% endblock %}
+

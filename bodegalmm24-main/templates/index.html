@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% include "menu.html" %}
+    <div class="container-fluid bg-light min-vh-100">
+        <div class="text-center py-5" style="background-color: #f8f9fa;">
+            <h1 class="display-4 text-success ">Gestión de <b>Bodega</b></h1>
+            <p class="lead text-muted">Tu orden, nuestro trabajo..</p>
+        </div>
+
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3gIFlH8oumSneE6_9J2yxNTclC7s0DcA6Jw&s"
+                            class="card-img-top" style="height: 300px; object-fit: cover;" alt="Producto 1" >
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Usuarios Activos</h5>
+                            <p class="card-text text-muted">Listado 2024</p>
+                            <a href="/dispositivo/templates/listar_usuarios/" class="btn btn-success rounded-pill">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow">
+                        <img src="https://cdn.prod.website-files.com/627b5fb5c95b8675fa0cdc1a/627b5fb5c95b8649230cde38_prestamos%20informatica.jpg"
+                            class="card-img-top" style="height: 300px; object-fit: cover;" alt="Producto 2">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Listado de préstamos</h5>
+                            <p class="card-text text-muted">Listado actual</p>
+                            <a href="/dispositivo/templates/listado_prestamos/" class="btn btn-success rounded-pill">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL6DCVHIxGBDctSUhHn4CCEF9yx-mR9jp3_w&s"
+                            class="card-img-top" style="height: 300px; object-fit: cover;" alt="Producto 3">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Regístrate</h5>
+                            <p class="card-text text-muted">Sólo con tu correo</p>
+                            <a href="/dispositivo/templates/registration/registro/" class="btn btn-success rounded-pill">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% include 'footer.html' %}
+    </div>
+    {% endblock %}
+</body>
+
+</html>

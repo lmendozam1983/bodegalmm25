@@ -1,0 +1,25 @@
+{% extends "base.html" %} 
+{% block content %} 
+{% load crispy_forms_tags %} 
+{% load bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+</head>
+<body>
+    <div class="container py-5">
+        <h1>Registro</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %} {{ register_form|crispy }}
+            <button class="btn btn-success" type="submit">Regístrate</button>
+        </form>
+        <p class="text-center">Si tienes actualmente una cuenta, inicie su sesión en <a href="/dispositivo/templates/registration/login"> Iniciar sesión</a>.
+        </p>
+    </div>
+    {% endblock content %}
+</body>
+</html>

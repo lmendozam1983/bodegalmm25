@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% include "menu.html" %}
+<div class="container my-5">
+    <h1 class="text-center mb-4 text-success ">Lista de <b>Productos</b></h1>
+
+    <!-- Tabla de productos -->
+    <table class="table table-striped table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th><b>Nombre</b></th>
+                <th><b>Bodega</b></th>
+                <th><b>Cantidad</b></th>
+                <th><b>Acciones</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td style="width: 23%">{{ producto.nombre }}</td>
+                <td style="width: 15%">{{ producto.bodega.nombre}}</td>
+                <td style="width: 5%"><b>{{ producto.cantidad }}</b></td>
+                <td style="width: 57%">
+
+                {% if user.is_authenticated and perms.producto.editar_prestamo %}
+                    <a href="{% url 'prestar_producto' producto.id %}" class="btn btn-success btn-m rounded-pill me-2"><b>Prestar</b></a>
+                    <a href="{% url 'prestamos_producto' producto.id %}" class="btn btn-info btn-m rounded-pill me-2"><b>Movimientos</b></a>
+                    <a href="{% url 'agregar_stock' producto.id %}" class="btn btn-dark btn-m rounded-pill"><b>Agregar stock</b></a>
+                    {% endif %}
+                    <a href="{% url 'solicitar_producto' producto.id %}" class="btn btn-warning rounded-pill"><b>Solicitar</b></a>
+                    <a href="{% url 'listar_notificaciones' %}" class="btn btn-primary rounded-pill"><b>Revisar solicitudes</b></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% include "footer.html" %}
+{% endblock %}
+

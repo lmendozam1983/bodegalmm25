@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% include "menu.html" %}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4 text-success"><b>Mis Notificaciones</b></h1>
+
+    <div class="list-group">
+        {% for notificacion in notificaciones %}
+            <div class="list-group-item d-flex justify-content-between align-items-center shadow-sm mb-3 p-3 rounded">
+                <div>
+                    <h5 class="font-weight-bold text-dark">{{ notificacion.mensaje }}</h5>
+                    <small class="text-muted">Fecha: <b>{{ notificacion.fecha_creacion }}</b></small>
+                </div>
+                <span class="badge fs-10 py-2 px-4
+                            {% if notificacion.estado == 'Pendiente' %} bg-warning 
+                            {% elif notificacion.estado == 'Leído' %} bg-success 
+                            {% else %} bg-success {% endif %} 
+                            rounded-pill">
+                            <b>{{ notificacion.get_estado_display }}</b>
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}
+
+
+
+

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block content %}
+
+
+{% include 'menu.html' %}
+<div class="container mt-5">
+    <h1 class="text-center text-success">Imágenes de <b>Usuarios</b></h1>
+
+    {% if imagenes %}
+    <div class="row g-4">
+        {% for imagen in imagenes %}
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm rounded-lg">
+                <!-- Imagen con tamaño fijo y ajuste -->
+                <div class="ratio ratio-4x3">
+                    <img src="{{ imagen.imagen.url }}" class="card-img-top object-fit-cover rounded-top" alt="Imagen de {{ imagen.usuario.username }}">
+                </div>
+                <div class="card-body text-center">
+                    <!-- Nombre de usuario -->
+                    <h5 class="card-title mb-2">{{ imagen.usuario.username }}</h5>
+                    <!-- Correo del usuario -->
+                    <p class="text-muted mb-3"><small>{{ imagen.usuario.email }}</small></p>
+                    <!-- Descripción -->
+                    <p class="card-text">{{ imagen.descripcion }}</p>
+                </div>
+                <div class="card-footer text-muted text-center">
+                    Subida el <b>{{ imagen.fecha_subida|date:"d M, Y" }}</b>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">No hay imágenes subidas aún.</p>
+    {% endif %}
+</div>
+
+{% include "footer.html" %}
+{% endblock %}

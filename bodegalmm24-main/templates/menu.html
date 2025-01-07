@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block content %}
+
+<nav class="navbar navbar-expand-lg bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="https://w7.pngwing.com/pngs/512/949/png-transparent-warehouse-architectural-engineering-logistics-building-warehouse-miscellaneous-freight-transport-rectangle-thumbnail.png" alt="Bootstrap" width="40" height="34"></a>
+        <a class="navbar-brand text-white fw-bold" href="{% url 'index' %}">Bodega LMM</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon" style="background-color: #eaecee;"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'index' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'listado' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'listado' %}">Listado dispositivos</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'ingresar' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'ingresar' %}">Ingresar dispositivo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'registrar_prestamo' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'registrar_prestamo' %}">Realizar Préstamo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'listado_prestamos' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'listado_prestamos' %}">Listado Prestamos</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'lista_productos' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'lista_productos' %}">Listado Productos</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'crear_productos' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'crear_producto' %}">Crear Productos</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'panel_solicitudes' %}active{% endif %} btn btn-outline-success text-white ms-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <b>Acciones</b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item {% if request.resolver_match.url_name == 'panel_solicitudes' %}active{% endif %}" href="{% url 'panel_solicitudes' %}">Panel Solicitudes</a></li>
+                        <li><a class="dropdown-item {% if request.resolver_match.url_name == 'listar_solicitudes' %}active{% endif %}" href="{% url 'listar_solicitudes' %}">Listar Solicitudes</a></li>
+                        <li><a class="dropdown-item {% if request.resolver_match.url_name == 'ver_imagenes_subidas' %}active{% endif %}" href="{% url 'ver_imagenes_subidas' %}">Usuarios Registrados</a></li>
+                    </ul>
+                </li>
+                
+                {% endif %}
+            </ul>
+            <form class="d-flex" role="search" action="https://www.google.com/search" method="get" target="_blank">
+                <input class="form-control me-2" type="search"  placeholder="Buscar con Google" aria-label="Search">
+                <button class="btn btn-outline-success text-white ms-2" type="submit">Ir</button>
+                <span class="nav-item dropdown text-white ms-auto">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <b>Hola, {{ user.username }}</b>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'perfil' %}">Perfil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a></li>
+                        </ul>
+                    {% else %}
+                        <button class="btn btn-sm btn-outline-success text-white ms-2" type="button" onclick="window.location.href='{% url 'login' %}'">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar
+                        </button>
+                    {% endif %}
+                </span>
+            </form>
+        </div>
+    </div>
+</nav>
+
+{% endblock %}

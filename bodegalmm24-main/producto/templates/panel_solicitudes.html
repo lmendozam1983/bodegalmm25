@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "menu.html" %}
+
+<div class="container mt-5">
+    <h2 class="text-center text-success  mb-4">Panel de Solicitudes <b>de Productos</b></h2>
+
+    {% if user.is_staff %}
+    <table class="table table-striped table-hover">
+        <thead class="table-success">
+            <tr>
+                <th>Producto</th>
+                <th>Cliente</th>
+                <th>Mensaje</th>
+                <th>Fecha</th>
+                <th>Leído</th>
+                <!--<th>Aprobado</th>-->
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for notificacion in notificaciones %}
+                <tr>
+                    <td>{{ notificacion.producto.nombre }}</td>
+                    <td>{{ notificacion.usuario.username }}</td>
+                    <td>{{ notificacion.mensaje }}</td>
+                    <td>{{ notificacion.fecha_creacion }}</td>
+                    <td>
+                        {% if notificacion.leida %}
+                            <span class="badge bg-success text-white fs-5 py-2 px-2 rounded-pill"><b>Leído</b></span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark fs-5 py-2 px-2 rounded-pill"><b>No leído</b></span>
+                        {% endif %}
+                    </td>
+                    <!--<td>
+                        {% if notificacion.aprobada %}
+                            <span class="badge bg-success text-white fs-5 py-2 px-2 rounded-pill"><b>Aprobada</b></span>
+                        {% else %}
+                        <span class="badge bg-warning text-dark fs-5 py-2 px-2 rounded-pill"><b>Pendiente</b></span>
+                        {% endif %}
+                    </td>-->
+                    <td>
+                        {% if notificacion.aprobada == False %}
+                        <a href="{% url 'aprobar_solicitud' notificacion.id %}" class="btn btn-success fs-7 py-2 px-2 rounded-pill"><b>Aprobar</b></a>
+                        {% endif %}
+                        <a href="{% url 'marcar_como_leido' notificacion.id %}" class="btn btn-primary fs-7 py-2 px-2 rounded-pill"><b>Marcar como leído</b></a>
+                        <a href="{% url 'generar_voucher' notificacion.id %}" class="btn btn-secondary fs-7 py-2 px-2 rounded-pill">Generar Voucher</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-warning mt-4">
+        <p>No tienes permisos para ver las solicitudes.</p>
+    </div>
+{% endif %}
+</div>
+
+{% include "footer.html" %}
+
+{% endblock %}
