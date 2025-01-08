@@ -29,6 +29,16 @@
                             <label for="id_marca" class="form-label text-success font-weight-bold">Nombre</label>
                             {{ form.nombre }}
                         </div>
+                        <div class="mb-3">
+                            <label for="id_bodega" class="form-label text-success font-weight-bold">Bodega</label>
+                            <select name="bodega" id="id_bodega" class="form-control">
+                                {% for option in form.bodega.field.queryset %}
+                                    <option value="{{ option.id }}" {% if option.id == form.bodega.value %}selected{% endif %}>
+                                        {{ option.nombre }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         
                         <div class="mb-3">
                             <label for="id_marca" class="form-label text-success font-weight-bold">Precio</label>

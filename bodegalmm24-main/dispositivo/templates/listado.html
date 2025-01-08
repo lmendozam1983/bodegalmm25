@@ -23,6 +23,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Serie</th>
+                    <th>Bodega</th>
                     <th>Descripción</th>
                     <th>Estado</th>
                     <th>Acciones</th>  <!-- Nueva columna para los botones -->
@@ -33,6 +34,7 @@
                     <tr>
                         <td>{{ dispositivo.nombre }}</td>
                         <td>{{ dispositivo.serial }}</td>
+                        <td>{{ dispositivo.bodega }}</td>
                         <td>{{ dispositivo.descripcion }}</td>
                         <td>
                             {% if dispositivo.estado == 'Disponible' %}

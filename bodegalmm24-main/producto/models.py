@@ -17,7 +17,6 @@ class Producto(models.Model):
     cantidad = models.PositiveIntegerField(verbose_name="Cantidad en stock")
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Precio unitario")
     fecha_ingreso = models.DateField(auto_now_add=True, verbose_name="Fecha de ingreso")
-
     class Meta:
         permissions = [
             ("visualizar_listado", "Puede visualizar el listado de productos"),

@@ -4,7 +4,7 @@ from .models import PrestamoModel
 from .models import User
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
+from .models import Profile, Bodega
 
 
 
@@ -12,7 +12,11 @@ class DeviceForm(forms.ModelForm):
     # specify the name of model to use 
     class Meta: 
         model = DeviceModel 
-        fields = ['nombre', 'precio', 'descripcion', 'stock', 'serial', 'estado',]
+        fields = ['nombre', 'precio', 'bodega', 'descripcion', 'stock', 'serial', 'estado',]
+        bodega = forms.ModelChoiceField(
+        queryset=Bodega.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'})  # Aplica la clase 'form-control'
+    )
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

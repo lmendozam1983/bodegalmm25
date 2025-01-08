@@ -29,8 +29,7 @@ def index(request):
     return render(request, 'index.html')
 
 def listadoView(request):
-    dispositivos = DeviceModel.objects.all().order_by('id')  # Obtén los datos
-    print(dispositivos)
+    dispositivos = DeviceModel.objects.select_related('bodega').all().order_by('id')  # Obtén los datos
     paginator = Paginator(dispositivos, 10) # Configura el paginador para 10 registros por página
     page_number = request.GET.get('page', 1) # Obtén el número de página actual de la solicitud GET
     page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
@@ -41,23 +40,25 @@ def listadoView(request):
 @permission_required('dispositivo.visualizar_listado', raise_exception=True)
 def deviceform_view(request):
     context = {}
+
+    # Cargar el formulario con los datos del POST si está disponible
     form = DeviceForm(request.POST or None, request.FILES or None)
 
+    # Estilos personalizados
     form.fields['nombre'].widget.attrs.update({'class': 'form-control custom-input'})
     form.fields['precio'].widget.attrs.update({'class': 'form-control custom-input'})
     form.fields['descripcion'].widget.attrs.update({'class': 'form-control custom-input'})
     form.fields['stock'].widget.attrs.update({'class': 'form-control custom-input'})
 
+    # Verificar si el formulario es válido
     if form.is_valid():
         form.save()
-        next_url = '/'
-        messages.success(request, "Dispositivo agregado exitosamente")
-        return HttpResponseRedirect(next_url)
-    else:
-        print(form.errors) 
+        messages.success(request, "Dispositivo registrado exitosamente.")
+        return redirect('/')  # Redirige a la página principal o la vista deseada
 
+    # Pasar el formulario al contexto para renderizarlo en la plantilla
     context['form'] = form
-    return render(request, "ingresar.html", context)
+    return render(request, 'ingresar.html', context)
 
 def editar(request, dispositivo_id):
     dispositivo = get_object_or_404(DeviceModel, pk=dispositivo_id)
