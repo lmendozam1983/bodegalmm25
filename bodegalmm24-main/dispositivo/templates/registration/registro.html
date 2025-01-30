@@ -17,8 +17,12 @@
             {% csrf_token %} {{ register_form|crispy }}
             <button class="btn btn-success" type="submit">Regístrate</button>
         </form>
-        <p class="text-center">Si tienes actualmente una cuenta, inicie su sesión en <a href="/dispositivo/templates/registration/login"> Iniciar sesión</a>.
+        <p class="text-center">Si tienes actualmente una cuenta, inicie su sesión en 
+            <a href="/dispositivo/templates/registration/login" class="text-decoration-none">
+                <i class="fas fa-sign-in-alt"></i> <b>Iniciar sesión</b>
+            </a>.
         </p>
+        
     </div>
     {% endblock content %}
 </body>

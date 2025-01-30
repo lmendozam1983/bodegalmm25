@@ -265,3 +265,10 @@ def historial_usuario_dispositivos(request):
     # Obtener todos los préstamos, ordenados por fecha de préstamo (de más reciente a más antiguo)
     prestamos = PrestamoModel.objects.all().order_by('-fecha_prestamo')
     return render(request, 'historial_usuario_dispositivos.html', {'prestamos': prestamos})
+
+
+from django.contrib.auth.views import PasswordResetView
+
+class CustomPasswordResetView(PasswordResetView):
+    template_name = 'registration/password_reset_email.html'
+    email_template_name = 'registration/password_reset_email.html'

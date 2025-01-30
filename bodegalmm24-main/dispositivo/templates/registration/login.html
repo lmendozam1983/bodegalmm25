@@ -17,10 +17,22 @@
         <form method="POST"> 
             {% csrf_token %} 
             {{ login_form|crispy }} 
-            <button class="btn btn-primary"type="submit">Ingresar</button> </form>
-        <p class="text-center">Si no tienes una cuenta, registrate, <a href="/dispositivo/templates/registration/registro"> para crear una cuenta</a>.</p>
-        <p><a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p>
-    </div> 
+                <button class="btn btn-primary btn-lg" type="submit">Ingresar</button>
+            
+            <div class="text-center">
+                <p class="text-muted mb-1">Si no tienes una cuenta, 
+                    <a href="/dispositivo/templates/registration/registro" class="text-decoration-none">
+                        <i class="fas fa-user-plus"></i> <b>regístrate aquí</b>
+                    </a>.
+                </p>
+                
+                <p class="text-muted mb-1">¿Se te olvidó la contraseña? 
+                    <a href="{% url 'password_reset' %}" class="text-decoration-none">
+                        <i class="fas fa-lock"></i> <b>Pincha acá</b>
+                    </a>
+                </p>
+                
+            </div>
     {% include "footer.html" %}
     {% endblock content %}
 </body>

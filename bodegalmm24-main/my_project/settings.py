@@ -155,3 +155,10 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'soportetecnico@colegionocedal.cl'  # Tu correo electrónico de Gmail
 EMAIL_HOST_PASSWORD = 'zfjt rlxb mabn ebeg'   # La contraseña de tu cuenta de Gmail (o un app password si usas autenticación en dos pasos)
+
+# Establece la URL del dominio y el protocolo
+DEFAULT_FROM_EMAIL = 'no-reply@localhost.com'  # Puede ser cualquier dirección de correo
+DOMAIN_NAME = 'Bodega Nocedal'
+
+# Especifica la plantilla personalizada para el restablecimiento de contraseñas
+PASSWORD_RESET_EMAIL_TEMPLATE = 'registration/password_reset_email.html'
