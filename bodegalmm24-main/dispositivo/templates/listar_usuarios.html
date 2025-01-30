@@ -32,7 +32,9 @@
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Nombre de Usuario</th>
+                            <th>Usuario</th>
+                            <th>Nombre</th>
+                            <th>Departamento</th>
                             <th>Email</th>
                             <th>Fecha de Creación</th>
                             <th>Última Conexión</th>
@@ -42,6 +44,8 @@
                         {% for usuario in page_obj %}
                         <tr>
                             <td>{{ usuario.username }}</td>
+                            <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+                            <td>{{ usuario.profile.departamento }}</td>
                             <td>{{ usuario.email }}</td>
                             <td>{{ usuario.date_joined|date:"d/m/Y H:i" }}</td>
                             <td>{{ usuario.last_login|date:"d/m/Y H:i" }}</td>

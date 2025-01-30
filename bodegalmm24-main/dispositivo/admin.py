@@ -1,5 +1,25 @@
 from django.contrib import admin
-from .models import DeviceModel, ImagenUsuario, Bodega
+from .models import DeviceModel, ImagenUsuario, Bodega, User
+from .forms import CustomUserCreationForm
+from django.contrib.auth.admin import UserAdmin
+
+# Register your models here.
+
+class CustomUserCreationForm(UserAdmin):
+    add_form = CustomUserCreationForm
+    
+    add_fieldsets = (
+        (None, {
+            "classes": ("wide",),
+            "fields": ("username", "email", "first_name", "last_name", "password1", "password2"),
+        }),
+    )
+    
+    list_display = ("username", "email", "first_name", "last_name", "is_staff")
+    search_fields = ("username", "email", "first_name", "last_name")
+    
+admin.site.unregister(User)
+admin.site.register(User, CustomUserCreationForm)
 
 class DeviceAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'precio', 'descripcion', 'stock')  # Muestra el campo dinámico en la lista
