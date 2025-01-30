@@ -83,6 +83,9 @@ class PrestamoModel(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     foto_perfil = models.ImageField(upload_to='fotos_perfil/', null=True, blank=True)
+    bio = models.TextField(blank=True, null=True)
+    telefono = models.CharField(max_length=15, blank=True, null=True)
+    direccion = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.user.username

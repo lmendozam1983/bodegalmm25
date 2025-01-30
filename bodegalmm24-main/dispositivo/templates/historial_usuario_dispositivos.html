@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include "menu.html" %}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Historial de Préstamos</h2>
+        </div>
+        <div class="card-body">
+            {% if prestamos %}
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Dispositivo</th>
+                            <th>Fecha de Préstamo</th>
+                            <th>Fecha de Devolución</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prestamo in prestamos %}
+                        <tr>
+                            <td>{{ prestamo.dispositivo.nombre }}</td> <!-- Producto en lugar de dispositivo -->
+                            <td>{{ prestamo.fecha_prestamo|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                {% if prestamo.fecha_devolucion %}
+                                    {{ prestamo.fecha_devolucion|date:"d/m/Y H:i" }}
+                                {% else %}
+                                    <span class="text-warning">No devuelto</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if prestamo.estado == 'Pendiente' %}
+                                    <span class="badge badge-warning">Pendiente</span>
+                                {% elif prestamo.estado == 'Aprobada' %}
+                                    <span class="badge badge-success">Aprobada</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Rechazada</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-center text-muted">No hay registros en tu historial.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}
+

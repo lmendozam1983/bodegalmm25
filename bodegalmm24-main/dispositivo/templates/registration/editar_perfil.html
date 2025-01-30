@@ -1,22 +1,84 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load widget_tweaks %}
 
 {% include "menu.html" %}
+
+
 <div class="container mt-5">
-    <div class="text-center mb-4">
-    <h1 class="display-4 text-success fw-bold">Editar Perfil</h1>
-    <div class="card shadow-lg mx-auto" style="max-width: 450px;">
-        <div class="card-body text-center">
-            <form method="POST" enctype="multipart/form-data">
+    <div class="col-lg-8 mx-auto" >
+        <div class="card shadow-lg p-4 border-0 rounded-3 ">
+            <h2 class="text-center text-success mb-4">Editar <b>Perfil</b></h2>
+            <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-success rounded-pill">Guardar Cambios</button>
-                <a href="{% url 'perfil' %}" class="btn btn-secondary rounded-pill">Cancelar</a>
+
+                <!-- Foto de Perfil con Vista Previa -->
+                <div class="mb-4 text-center">
+                    <label for="{{ form.foto_perfil.id_for_label }}" class="form-label fw-semibold"><b>Foto de Perfil</b></label>
+                    <div class="d-flex justify-content-center">
+                        {% if form.foto_perfil.value %}
+                            <img id="preview" src="{{ form.foto_perfil.value.url }}" alt="Foto de Perfil" class="rounded-circle border mb-4" width="150">
+                        {% else %}
+                            <img id="preview" src="URL_IMAGEN_DEFAULT" alt="Foto de Perfil" class="img-thumbnail mb-2" width="150">
+                        {% endif %}
+                    </div>
+                    <div class="input-group">
+                        {{ form.foto_perfil|add_class:"form-control form-control-lg text-center" }}
+                    </div>
+                </div>
+
+                <!-- Nombre y Apellido -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label fw-semibold"><b>Nombre</b></label>
+                        {{ form.first_name|add_class:"form-control rounded-3 shadow-sm" }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label fw-semibold"><b>Apellido</b></label>
+                        {{ form.last_name|add_class:"form-control rounded-3 shadow-sm" }}
+                    </div>
+                </div>
+
+                <!-- Correo Electrónico -->
+                <div class="mb-3">
+                    <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold"><b>Correo Electrónico</b></label>
+                    {{ form.email|add_class:"form-control rounded-3 shadow-sm" }}
+                </div>
+
+                <!-- Teléfono y Dirección -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.telefono.id_for_label }}" class="form-label fw-semibold"><b>Teléfono</b></label>
+                        {{ form.telefono|add_class:"form-control rounded-3 shadow-sm" }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.direccion.id_for_label }}" class="form-label fw-semibold"><b>Dirección</b></label>
+                        {{ form.direccion|add_class:"form-control rounded-3 shadow-sm" }}
+                    </div>
+                </div>
+
+                <!-- Botón de Guardar -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-lg  rounded-pill"><b>Guardar Cambios</b></button>
+                </div>
             </form>
         </div>
     </div>
 </div>
-</div>
+
+<!-- Script para vista previa de la imagen -->
+<script>
+document.getElementById("id_foto_perfil").addEventListener("change", function(event) {
+    let reader = new FileReader();
+    reader.onload = function() {
+        let preview = document.getElementById("preview");
+        preview.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+});
+</script>
+
+
 
 {% include "footer.html" %}
 {% endblock %}

@@ -17,4 +17,6 @@ urlpatterns = [
     path('templates/registration/perfil/', views.perfilView, name='perfil'),
     path('templates/registration/editar_perfil/', views.editarPerfilView, name='editar_perfil'),
     path('templates/ver_imagenes/', views.ver_imagenes_subidas, name='ver_imagenes_subidas'),
+    path('historial_usuario_productos/', views.historial_usuario_productos, name='historial_usuario_productos'),
+    path('historial_usuario_dispositivos/', views.historial_usuario_dispositivos, name='historial_usuario_dispositivos'),
 ]

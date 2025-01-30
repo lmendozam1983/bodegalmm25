@@ -32,11 +32,11 @@ class AdminDeviceForm(forms.ModelForm):
 
 class RegistroUsuarioForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    foto_perfil = forms.ImageField(required=False)  # Campo para la imagen de perfil
+
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2", "foto_perfil")
+        fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
         user = super(RegistroUsuarioForm, self).save(commit=False)
@@ -44,7 +44,6 @@ class RegistroUsuarioForm(UserCreationForm):
         if commit:
             user.save()
             # Guardar la imagen en el perfil del usuario
-            user.profile.foto_perfil = self.cleaned_data['foto_perfil']
             user.profile.save()
         return user
 
@@ -58,6 +57,23 @@ class PrestamoForm(forms.ModelForm):
         }
         
 class EditarPerfilForm(forms.ModelForm):
+    email = forms.EmailField(required=True, label="Correo Electrónico")
+    first_name = forms.CharField(required=True, label="Nombre")
+    last_name = forms.CharField(required=True, label="Apellido")
+
     class Meta:
         model = Profile
-        fields = ['foto_perfil']
+        fields = ['foto_perfil', 'first_name', 'last_name', 'email', 'telefono', 'direccion']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(EditarPerfilForm, self).__init__(*args, **kwargs)
+        # Personaliza la apariencia de los campos si usas Bootstrap
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})

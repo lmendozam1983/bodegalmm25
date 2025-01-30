@@ -21,8 +21,12 @@ from .models import Producto, Bodega
 
 # Create your views here.
 def lista_productos(request):
-    productos = Producto.objects.select_related('bodega').all()
-    return render(request, 'lista_productos.html', {'productos': productos})
+    productos = Producto.objects.select_related('bodega').all().order_by('id')  # Obtén los datos
+    paginator = Paginator(productos, 10)  # Configura el paginador para 10 registros por página
+    page_number = request.GET.get('page', 1)  # Obtén el número de página actual de la solicitud GET
+    page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
+    return render(request, 'lista_productos.html', {'page_obj': page_obj})
+
 
 @login_required
 @permission_required('producto.crear_producto', raise_exception=True)
@@ -157,9 +161,11 @@ def agregar_stock(request, producto_id):
 def panel_solicitudes(request):
     
     # Obtén todas las notificaciones
-    notificaciones = Notificacion.objects.all()
-
-    return render(request, 'panel_solicitudes.html', {'notificaciones': notificaciones})
+    notificaciones = Notificacion.objects.order_by('id')  # Obtén los datos
+    paginator = Paginator(notificaciones, 10)  # Configura el paginador para 10 registros por página
+    page_number = request.GET.get('page', 1)  # Obtén el número de página actual de la solicitud GET
+    page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
+    return render(request, 'panel_solicitudes.html', {'page_obj': page_obj})
 
 @login_required
 def marcar_como_leido(request, notificacion_id):

@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for producto in productos %}
+            {% for producto in page_obj %}
             <tr>
                 <td style="width: 23%">{{ producto.nombre }}</td>
                 <td style="width: 15%">{{ producto.bodega.nombre}}</td>
@@ -35,6 +35,23 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" title="Primera página"><i class="fas fa-angle-double-left"></i></a>
+                <a href="?page={{ page_obj.previous_page_number }}" title="Página anterior"><i class="fas fa-chevron-left"></i></a>
+            {% endif %}
+    
+            <span class="current">
+                Página <b>{{ page_obj.number }}</b> de <b>{{ page_obj.paginator.num_pages }}</b>
+            </span>
+    
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" title="Página siguiente"><i class="fas fa-chevron-right"></i></a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" title="Última página"><i class="fas fa-angle-double-right"></i></a>
+            {% endif %}
+        </span>
+    </div>
 </div>
 {% include "footer.html" %}
 {% endblock %}

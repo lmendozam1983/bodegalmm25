@@ -22,6 +22,8 @@ from .models import PrestamoModel
 from .forms import PrestamoForm
 from .forms import EditarPerfilForm  
 from .models import ImagenUsuario
+from producto.models import Prestamo
+
 
 # Create your views here.
 
@@ -186,12 +188,20 @@ def eliminar_prestamos(request, prestamo_id):
     
 
 def listado_prestamos(request):
-    prestamos = PrestamoModel.objects.all()
-    return render(request, 'listado_prestamos.html', {'prestamos': prestamos})
+    prestamos = PrestamoModel.objects.order_by('id')  # Obtén los datos
+    paginator = Paginator(prestamos, 10)  # Configura el paginador para 10 registros por página
+    page_number = request.GET.get('page', 1)  # Obtén el número de página actual de la solicitud GET
+    page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
+    return render(request, 'listado_prestamos.html', {'page_obj': page_obj})
+    
 
 def listar_usuarios(request):
     usuarios = User.objects.all()  # Obtener todos los usuarios
-    return render(request, 'listar_usuarios.html', {'usuarios': usuarios})
+    paginator = Paginator(usuarios, 10)  # Configura el paginador para 10 registros por página
+    page_number = request.GET.get('page', 1)  # Obtén el número de página actual de la solicitud GET
+    page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
+    # Renderiza la plantilla con los préstamos en el contexto
+    return render(request, 'listar_usuarios.html', {'page_obj': page_obj})
 
 def generar_codigo_barras(numero_serie):
     codigo = Code128(numero_serie, writer=ImageWriter())
@@ -206,15 +216,30 @@ def perfilView(request):
 
 @login_required
 def editarPerfilView(request):
-    profile = request.user.profile
+    profile = request.user.profile  # Obtener el perfil del usuario
+    user = request.user  # Obtener el usuario
+
     if request.method == 'POST':
         form = EditarPerfilForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
+            profile = form.save(commit=False)  # Guardar perfil sin hacer commit aún
+            
+            # Actualizar datos del usuario si están en el formulario
+            user.email = form.cleaned_data.get('email', user.email)
+            user.first_name = form.cleaned_data.get('first_name', user.first_name)
+            user.last_name = form.cleaned_data.get('last_name', user.last_name)
+            
+            user.save()  # Guardar cambios en el usuario
+            profile.save()  # Guardar cambios en el perfil
+
             messages.success(request, 'Perfil actualizado exitosamente.')
-            return redirect('perfil')
+            return redirect('perfil')  # Redirigir a la vista del perfil
     else:
-        form = EditarPerfilForm(instance=profile)
+        form = EditarPerfilForm(instance=profile, initial={
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name
+        })
 
     return render(request, 'registration/editar_perfil.html', {'form': form})
 
@@ -224,9 +249,19 @@ def ver_imagenes_subidas(request):
     print(imagenes)
     return render(request, 'ver_imagenes.html', {'imagenes': imagenes})
 
-def ver_imagenes(request):
-    imagenes = ImagenUsuario.objects.select_related('usuario').order_by('-fecha_subida')
-    context = {
-        'imagenes': imagenes
-    }
-    return render(request, 'ver_imagenes.html', context)
+
+@login_required
+def historial_usuario_productos(request):
+    # Filtra los préstamos realizados por el usuario autenticado y optimiza las relaciones
+    prestamos = Prestamo.objects.filter(usuario=request.user).select_related('producto', 'bodega', 'notificacion').order_by('-fecha_prestamo')
+    paginator = Paginator(prestamos, 10)  # Configura el paginador para 10 registros por página
+    page_number = request.GET.get('page', 1)  # Obtén el número de página actual de la solicitud GET
+    page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
+    # Renderiza la plantilla con los préstamos en el contexto
+    return render(request, 'historial_usuario_productos.html', {'page_obj': page_obj})
+
+@login_required
+def historial_usuario_dispositivos(request):
+    # Obtener todos los préstamos, ordenados por fecha de préstamo (de más reciente a más antiguo)
+    prestamos = PrestamoModel.objects.all().order_by('-fecha_prestamo')
+    return render(request, 'historial_usuario_dispositivos.html', {'prestamos': prestamos})

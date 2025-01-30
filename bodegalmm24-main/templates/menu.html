@@ -19,13 +19,15 @@
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'listado' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'listado' %}">Listado dispositivos</a>
                 </li>
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and perms.producto.editar_prestamo %}
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'ingresar' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'ingresar' %}">Ingresar dispositivo</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'registrar_prestamo' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'registrar_prestamo' %}">Realizar Préstamo</a>
                 </li>
+                {% endif %}
+                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'listado_prestamos' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'listado_prestamos' %}">Listado Prestamos</a>
                 </li>
@@ -33,7 +35,7 @@
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'lista_productos' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'lista_productos' %}">Listado Productos</a>
                 </li>
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and perms.producto.editar_prestamo %}
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'crear_productos' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'crear_producto' %}">Crear Productos</a>
                 </li>
@@ -45,6 +47,8 @@
                         <li><a class="dropdown-item {% if request.resolver_match.url_name == 'panel_solicitudes' %}active{% endif %}" href="{% url 'panel_solicitudes' %}">Panel Solicitudes</a></li>
                         <li><a class="dropdown-item {% if request.resolver_match.url_name == 'listar_solicitudes' %}active{% endif %}" href="{% url 'listar_solicitudes' %}">Listar Solicitudes</a></li>
                         <li><a class="dropdown-item {% if request.resolver_match.url_name == 'ver_imagenes_subidas' %}active{% endif %}" href="{% url 'ver_imagenes_subidas' %}">Usuarios Registrados</a></li>
+                        <li><a class="dropdown-item {% if request.resolver_match.url_name == 'historial_usuario_productos' %}active{% endif %}" href="{% url 'historial_usuario_productos' %}">Historial Préstamos Productos</a></li>
+                        <li><a class="dropdown-item {% if request.resolver_match.url_name == 'historial_usuario_dispositivos' %}active{% endif %}" href="{% url 'historial_usuario_dispositivos' %}">Historial Préstamos Dispositivos</a></li>
                     </ul>
                 </li>
                 
