@@ -149,3 +149,9 @@ USE_TZ = True  # Si quieres manejar zonas horarias con soporte UTC
 MEDIA_URL = '/media/'  # URL pública para acceder a los archivos
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Ruta absoluta a la carpeta 'media' en el directorio del proyecto
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'soportetecnico@colegionocedal.cl'  # Tu correo electrónico de Gmail
+EMAIL_HOST_PASSWORD = 'zfjt rlxb mabn ebeg'   # La contraseña de tu cuenta de Gmail (o un app password si usas autenticación en dos pasos)
