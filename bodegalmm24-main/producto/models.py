@@ -30,6 +30,7 @@ class Notificacion(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     mensaje = models.TextField()  # Campo para el mensaje
+    cantidad = models.PositiveIntegerField(null=False, blank=False) 
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     leida = models.BooleanField(default=False)
     aprobada = models.BooleanField(default=False)

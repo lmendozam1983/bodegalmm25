@@ -11,8 +11,11 @@
         {% for notificacion in notificaciones %}
             <div class="list-group-item d-flex justify-content-between align-items-center shadow-sm mb-3 p-3 rounded">
                 <div>
-                    <h5 class="font-weight-bold text-dark">{{ notificacion.mensaje }}</h5>
-                    <small class="text-muted">Fecha: <b>{{ notificacion.fecha_creacion }}</b></small>
+                    <h5 class="font-weight-bold text-dark">Usuario: <b>{{ notificacion.usuario }}</b></h5>
+                    <h5 class="font-weight-bold text-dark">Producto: <b>{{ notificacion.producto }}</b></h5>
+                    <h5 class="font-weight-bold text-dark">Cantidad: <b>{{ notificacion.cantidad }}</b></h5>
+                    <h5 class="font-weight-bold text-dark">Motivo: <b>{{ notificacion.mensaje }}</b></h5>
+                    <h5 class="font-weight-bold text-dark">Fecha de solicitud: <b>{{ notificacion.fecha_creacion }}</b></h5>
                 </div>
                 <span class="badge fs-10 py-2 px-4
                             {% if notificacion.estado == 'Pendiente' %} bg-warning 

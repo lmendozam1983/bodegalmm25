@@ -161,7 +161,7 @@ def agregar_stock(request, producto_id):
 def panel_solicitudes(request):
     
     # Obtén todas las notificaciones
-    notificaciones = Notificacion.objects.order_by('id')  # Obtén los datos
+    notificaciones = Notificacion.objects.order_by('-id')  # Obtén los datos
     paginator = Paginator(notificaciones, 10)  # Configura el paginador para 10 registros por página
     page_number = request.GET.get('page', 1)  # Obtén el número de página actual de la solicitud GET
     page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
@@ -187,24 +187,37 @@ def solicitar_producto(request, producto_id):
     if request.method == 'POST':
         form = SolicitudProductoForm(request.POST)
         if form.is_valid():
-            # En vez de crear una instancia de SolicitudProducto, creamos una de Notificacion
             mensaje = form.cleaned_data['mensaje']
+            cantidad = request.POST.get("cantidad")  # Capturamos cantidad manualmente
+
+            if not cantidad:  # Si cantidad está vacía, mostramos un error
+                messages.error(request, "Debes ingresar una cantidad válida.")
+                return redirect("solicitar_producto", producto_id=producto_id)  # Redirige a la misma vista
             
-            # Crear la notificación, que también contiene la solicitud
+            try:
+                cantidad = int(cantidad)  # Convertimos a entero
+                if cantidad <= 0:
+                    messages.error(request, "La cantidad debe ser mayor a 0.")
+                    return redirect("solicitar_producto", producto_id=producto_id)
+            except ValueError:
+                messages.error(request, "Debes ingresar un número válido en cantidad.")
+                return redirect("solicitar_producto", producto_id=producto_id)
+
+            # Crear la notificación con la cantidad
             notificacion = Notificacion(
                 usuario=request.user,
                 producto=producto,
-                mensaje=mensaje,  # El mensaje del formulario será usado para la solicitud
+                mensaje=mensaje,
+                cantidad=cantidad,  # Ahora pasamos la cantidad correctamente
             )
             notificacion.save()
 
-            messages.success(request, f"Has solicitado el producto {producto.nombre}. El administrador revisará tu solicitud.")
+            messages.success(request, f"Has solicitado {cantidad} unidades de {producto.nombre}.")
             return redirect('lista_productos')  # Redirige a la lista de productos
     else:
         form = SolicitudProductoForm()
 
     return render(request, 'solicitar_producto.html', {'form': form, 'producto': producto})
-
 
 
 def aprobar_solicitud(request, notificacion_id):
@@ -248,6 +261,7 @@ def generar_voucher(request, notificacion_id):
     context = {
         'usuario': notificacion.usuario,
         'producto': notificacion.producto,
+        "cantidad": notificacion.cantidad,
         'fecha_prestamo': notificacion.fecha_creacion,
         'fecha_devolucion': notificacion.fecha_creacion + timedelta(days=7),  # Ejemplo: 7 días después
         'prestamos': prestamo

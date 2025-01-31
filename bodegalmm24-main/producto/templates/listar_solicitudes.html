@@ -13,6 +13,8 @@
                 <tr>
                     <th><b>Producto</b></th>
                     <th><b>Usuario</b></th>
+                    <th><b>Fecha</b></th>
+                    <th><b>Cantidad</b></th> 
                     <th><b>Mensaje</b></th>
                     <th><b>Estado</b></th>
                     <th><b>Acciones</b></th>
@@ -23,6 +25,8 @@
                     <tr>
                         <td>{{ solicitud.producto.nombre }}</td>
                         <td>{{ solicitud.usuario.username }}</td>
+                        <td>{{ solicitud.fecha_creacion }}</td>
+                        <td>{{ solicitud.cantidad }}</td>
                         <td>{{ solicitud.mensaje }}</td>
                         <td>{{ solicitud.estado }}</td>
                         <td>

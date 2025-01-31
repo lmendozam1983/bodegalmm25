@@ -89,18 +89,23 @@ def loginView(request):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(username=username,password=password)
+            user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                # Solo mostrar el mensaje después de un login exitoso
                 messages.info(request, f"Iniciaste sesión como: {username}.")
-                next_url = '/index/'
-                return HttpResponseRedirect('/')
+                # Redirigir a otra página para evitar recarga con mensaje
+                return redirect('/')  # Asegúrate de tener la URL 'home' definida
             else:
-                messages.error(request,"Invalido username o password.")
+                messages.error(request, "Usuario o contraseña incorrectos.")
         else:
-            messages.error(request,"Invalido username o password.")
-    form = AuthenticationForm()
+            messages.error(request, "Por favor, completa el formulario correctamente.")
+
+    else:
+        form = AuthenticationForm()
+
     return render(request, "registration/login.html", {"login_form": form})
+
 
 
 def registroView(request): 
