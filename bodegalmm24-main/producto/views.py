@@ -21,11 +21,29 @@ from .models import Producto, Bodega
 
 # Create your views here.
 def lista_productos(request):
-    productos = Producto.objects.select_related('bodega').all().order_by('id')  # Obtén los datos
-    paginator = Paginator(productos, 10)  # Configura el paginador para 10 registros por página
-    page_number = request.GET.get('page', 1)  # Obtén el número de página actual de la solicitud GET
-    page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
-    return render(request, 'lista_productos.html', {'page_obj': page_obj})
+    # Obtener los filtros desde el formulario (GET)
+    nombre = request.GET.get('nombre', '')
+    tipo_descripcion = request.GET.get('tipo_descripcion', '')
+
+    # Filtrar los productos según los criterios de búsqueda
+    productos = Producto.objects.all()
+
+    if nombre:
+        productos = productos.filter(nombre__icontains=nombre)  # Filtrar por nombre, caso insensible
+    if tipo_descripcion:
+        productos = productos.filter(tipo_descripcion=tipo_descripcion)  # Filtrar por tipo de descripción
+
+    # Configura la paginación
+    paginator = Paginator(productos, 10)  # 10 productos por página
+    page_number = request.GET.get('page', 1)  # Número de página actual
+    page_obj = paginator.get_page(page_number)  # Obtiene los productos de la página correspondiente
+
+    # Pasar los productos filtrados y los filtros al contexto
+    return render(request, 'lista_productos.html', {
+        'page_obj': page_obj,
+        'nombre': nombre,
+        'tipo_descripcion': tipo_descripcion
+    })
 
 
 @login_required
@@ -36,6 +54,7 @@ def crear_producto(request):
         cantidad = request.POST['cantidad']
         precio_unitario = request.POST['precio_unitario']
         descripcion = request.POST['descripcion']
+        tipo_descripcion = request.POST['tipo_descripcion']  # Obtener el tipo de descripción
         bodega_id = request.POST.get('bodega')  # Obtener la bodega seleccionada desde el formulario
 
         # Obtener la instancia de la bodega seleccionada
@@ -47,6 +66,7 @@ def crear_producto(request):
             cantidad=cantidad,
             precio_unitario=precio_unitario,
             descripcion=descripcion,
+            tipo_descripcion=tipo_descripcion,  # Guardar el tipo de descripción
             bodega=bodega,  # Asociar el producto a la bodega seleccionada
         )
         return redirect('lista_productos')

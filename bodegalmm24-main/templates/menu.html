@@ -33,14 +33,14 @@
                 </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'lista_productos' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'lista_productos' %}">Listado Productos</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'lista_productos' %}active{% endif %} btn btn-outline-danger text-white ms-2" href="{% url 'lista_productos' %}">Listado Productos</a>
                 </li>
                 {% if user.is_authenticated and perms.producto.editar_prestamo %}
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'crear_productos' %}active{% endif %} btn btn-outline-success text-white ms-2" href="{% url 'crear_producto' %}">Crear Productos</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'crear_productos' %}active{% endif %} btn btn-outline-danger text-white ms-2" href="{% url 'crear_producto' %}">Crear Productos</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'panel_solicitudes' %}active{% endif %} btn btn-outline-success text-white ms-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'panel_solicitudes' %}active{% endif %} btn btn-outline-primary text-white ms-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <b>Acciones</b>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

@@ -11,6 +11,11 @@
             <input type="text" class="form-control" id="nombre" name="nombre" required>
         </div>
         <div class="mb-3">
+            <label for="numero_serie" class="form-label"><b>Número de Serie</b></label>
+            <input type="text" class="form-control" id="numero_serie" name="numero_serie" readonly>
+        </div>
+        
+        <div class="mb-3">
             <label for="cantidad" class="form-label"><b>Cantidad</b></label>
             <input type="number" class="form-control" id="cantidad" name="cantidad" required>
         </div>
@@ -29,6 +34,19 @@
         <div class="mb-3">
             <label for="descripcion" class="form-label"><b>Descripción</b></label>
             <textarea class="form-control" id="descripcion" name="descripcion"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="tipo_descripcion" class="form-label"><b>Tipo de Producto</b></label>
+            <select class="form-control" id="tipo_descripcion" name="tipo_descripcion" required>
+                <option value="" disabled selected>Seleccione un tipo</option>
+                <option value="aseo">ASEO</option>
+                <option value="oficina">OFICINA</option>
+                <option value="ferreteria">FERRETERÍA</option>
+                <option value="lab_electronica">LAB. ELECTRÓNICA</option>
+                <option value="lab_telecomunicaciones">LAB. TELECOMUNICACIONES</option>
+                <option value="herramientas">HERRAMIENTAS</option>
+                <option value="toner_tintas">TONER Y TINTAS</option>
+            </select>
         </div>
         <button type="submit" class="btn btn-success rounded-pill"><b>Guardar</b></button>
     </form>

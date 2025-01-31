@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 
 
@@ -17,6 +18,32 @@ class Producto(models.Model):
     cantidad = models.PositiveIntegerField(verbose_name="Cantidad en stock")
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Precio unitario")
     fecha_ingreso = models.DateField(auto_now_add=True, verbose_name="Fecha de ingreso")
+    numero_serie = models.CharField(max_length=20, unique=True, editable=False, default="")
+    
+    DESCRIPCION_CHOICES = [
+        ('Aseo', 'Aseo'),
+        ('Oficina', 'Oficina'),
+        ('Ferretería', 'Ferretería'),
+        ('Lab_Electronica', 'Lab_Electronica'),
+        ('Lab_Telecomunicaciones', 'Lab_Telecomunicaciones'),
+        ('Herramientas', 'Herramientas'),
+        ('Toner_Tintas', 'Toner_Tintas'),
+    ]
+
+    tipo_descripcion = models.CharField(
+        max_length=50,
+        choices=DESCRIPCION_CHOICES,
+        verbose_name="Tipo de descripción",
+        blank=True,
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.numero_serie:  # Generar solo si no existe
+            self.numero_serie = self.generar_numero_serie()
+        super().save(*args, **kwargs)
+
+    def generar_numero_serie(self):
+        return f"PROD-{uuid.uuid4().hex[:12].upper()}"  # Ejemplo: PROD-A1B2C3D4E5F6
     class Meta:
         permissions = [
             ("visualizar_listado", "Puede visualizar el listado de productos"),

@@ -5,11 +5,37 @@
 <div class="container my-5">
     <h1 class="text-center mb-4 text-success ">Lista de <b>Productos</b></h1>
 
+    <form method="GET" class="mb-3">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="nombre" placeholder="Filtrar por nombre" value="{{ nombre }}">
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" name="tipo_descripcion">
+                    <option value="">Seleccione tipo de producto</option>
+                    <option value="aseo" {% if tipo_descripcion == "aseo" %}selected{% endif %}>ASEO</option>
+                    <option value="oficina" {% if tipo_descripcion == "oficina" %}selected{% endif %}>OFICINA</option>
+                    <option value="ferreteria" {% if tipo_descripcion == "ferreteria" %}selected{% endif %}>FERRETERÍA</option>
+                    <option value="lab_electronica" {% if tipo_descripcion == "lab_electronica" %}selected{% endif %}>LAB. ELECTRÓNICA</option>
+                    <option value="lab_telecomunicaciones" {% if tipo_descripcion == "lab_telecomunicaciones" %}selected{% endif %}>LAB. TELECOMUNICACIONES</option>
+                    <option value="herramientas" {% if tipo_descripcion == "herramientas" %}selected{% endif %}>HERRAMIENTAS</option>
+                    <option value="toner_tintas" {% if tipo_descripcion == "toner_tintas" %}selected{% endif %}>TONER Y TINTAS</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary ">Filtrar</button>
+            </div>
+        </div>
+    </form>
+
     <!-- Tabla de productos -->
     <table class="table table-striped table-bordered">
         <thead class="table-success">
             <tr>
                 <th><b>Nombre</b></th>
+                <th><b>Código</b></th>
+                <th><b>Descripción</b></th>
+                <th><b>Tipo</b></th>
                 <th><b>Bodega</b></th>
                 <th><b>Cantidad</b></th>
                 <th><b>Acciones</b></th>
@@ -18,8 +44,11 @@
         <tbody>
             {% for producto in page_obj %}
             <tr>
-                <td style="width: 23%">{{ producto.nombre }}</td>
-                <td style="width: 15%">{{ producto.bodega.nombre}}</td>
+                <td style="width: 10%">{{ producto.nombre }}</td>
+                <td style="width: 13%">{{ producto.numero_serie }}</td>
+                <td style="width: 5%">{{ producto.descripcion}}</td>
+                <td style="width: 5%">{{ producto.tipo_descripcion}}</td>
+                <td style="width: 5%">{{ producto.bodega.nombre}}</td>
                 <td style="width: 5%"><b>{{ producto.cantidad }}</b></td>
                 <td style="width: 57%">
 
