@@ -13,6 +13,7 @@
     <!-- Agregando el CSS de AOS -->
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <style>
+        /* Animación para emular el condensador de flujo */
         #condensador-carga {
             position: fixed;
             top: 0;
@@ -29,38 +30,79 @@
             animation: fadeInOut 2s ease-out forwards;
         }
 
-        .carga-texto {
-            text-align: center;
-            color: #fff;
-            font-size: 24px;
-        }
-
         .condensador {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin-right: 5px;
+            position: relative;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #fff, #4e74b8);
-            animation: flujo 5.5s infinite alternate;
+            border: 10px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.6), 0 0 25px rgba(0, 255, 255, 0.4);
+            animation: vibrar 1s ease-out infinite, destello 0.3s ease-out infinite;
         }
 
-        .carga-texto p {
-            margin-top: 15px;
-            font-size: 30px;
-            font-weight: bold;
+        .condensador::before,
+        .condensador::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 20px;
+            background-color: #0ff;
+            transform-origin: center;
+            animation: pulsar 1.5s ease-out infinite;
         }
 
-        /* Animación de condensador de flujo */
-        @keyframes flujo {
+        .condensador::before {
+            transform: rotate(45deg);
+        }
+
+        .condensador::after {
+            transform: rotate(-45deg);
+        }
+
+        /* Animación de vibración */
+        @keyframes vibrar {
             0% {
-                transform: scale(0.5);
-                opacity: 1;
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(5deg) scale(1.1);
             }
 
             100% {
-                transform: scale(5.5);
-                opacity: 0.2;
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        /* Efecto de destello */
+        @keyframes destello {
+            0% {
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.6), 0 0 25px rgba(0, 255, 255, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(0, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 1);
+            }
+
+            100% {
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.6), 0 0 25px rgba(0, 255, 255, 0.4);
+            }
+        }
+
+        /* Animación de pulsar */
+        @keyframes pulsar {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
             }
         }
 
@@ -85,10 +127,7 @@
 <body>
     <!-- Animación Condensador de Flujo -->
     <div id="condensador-carga">
-        <div class="carga-texto">
-            <span class="condensador"></span>
-            <p>Cargando el Condensador de Flujo</p>
-        </div>
+        <div class="condensador"></div>
     </div>
 
     {% include "menu.html" %}
@@ -150,7 +189,7 @@
         window.addEventListener("load", function () {
             setTimeout(function () {
                 document.getElementById("condensador-carga").style.display = "none";
-            }, 3000);
+            }, 5000);
         });
     </script>
 </body>
