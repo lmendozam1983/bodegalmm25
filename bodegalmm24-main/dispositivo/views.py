@@ -66,7 +66,7 @@ def deviceform_view(request):
     if form.is_valid():
         form.save()
         messages.success(request, "Dispositivo registrado exitosamente.")
-        return redirect('/')  # Redirige a la página principal o la vista deseada
+        return redirect('listado')  # Redirige a la página principal o la vista deseada
 
     # Pasar el formulario al contexto para renderizarlo en la plantilla
     context['form'] = form

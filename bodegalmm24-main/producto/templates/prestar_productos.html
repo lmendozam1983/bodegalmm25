@@ -3,7 +3,7 @@
 
 {% include "menu.html" %}
   <div class="container mt-5">
-    <h2 class="text-center mb-4">Prestar Producto: <span class="text-success fw-bold">{{ producto.nombre }}</span></h2>
+    <h2 class="text-center mb-4" data-aos="fade-slide-up" data-aos-duration="2000">Prestar Producto: <span class="text-success fw-bold">{{ producto.nombre }}</span></h2>
 
     <form method="POST" action="{% url 'prestar_producto' producto.id %}" class="bg-light p-4 rounded shadow-sm">
       {% csrf_token %}

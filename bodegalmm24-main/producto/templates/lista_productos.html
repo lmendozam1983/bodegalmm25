@@ -2,8 +2,89 @@
 {% block content %}
 
 {% include "menu.html" %}
+<!-- Agregando el CSS de AOS -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<style>
+    #condensador-carga {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 9999;
+        opacity: 1;
+        pointer-events: none;
+        animation: fadeInOut 2s ease-out forwards;
+    }
+
+    .carga-texto {
+        text-align: center;
+        color: #fff;
+        font-size: 24px;
+    }
+
+    .condensador {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #fff, #4e74b8);
+        animation: flujo 5.5s infinite alternate;
+    }
+
+    .carga-texto p {
+        margin-top: 15px;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    /* Animación de condensador de flujo */
+    @keyframes flujo {
+        0% {
+            transform: scale(0.5);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(5.5);
+            opacity: 0.2;
+        }
+    }
+
+    /* Animación de desvanecimiento */
+    @keyframes fadeInOut {
+        0% {
+            opacity: 1;
+        }
+
+        99% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+            pointer-events: none;
+        }
+    }
+</style>
+</head>
+
+<body>
+<!-- Animación Condensador de Flujo -->
+<div id="condensador-carga">
+    <div class="carga-texto">
+        <span class="condensador"></span>
+        <p>Lista de Productos</p>
+    </div>
+</div>
+
 <div class="container my-5">
-    <h1 class="text-center mb-4 text-success ">Lista de <b>Productos</b></h1>
+    <h1 class="text-center mb-4 text-success " data-aos="fade-slide-up" data-aos-duration="2000">Lista de <b>Productos</b></h1>
 
     <form method="GET" class="mb-3">
         <div class="row">
@@ -83,5 +164,16 @@
     </div>
 </div>
 {% include "footer.html" %}
+<!-- Agregando AOS.js -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+    // Ocultar el mensaje de carga después de un tiempo (3 segundos)
+    window.addEventListener("load", function () {
+        setTimeout(function () {
+            document.getElementById("condensador-carga").style.display = "none";
+        }, 3000);
+    });
+</script>
 {% endblock %}
 
