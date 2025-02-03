@@ -31,12 +31,22 @@ def index(request):
     return render(request, 'index.html')
 
 def listadoView(request):
+    nombre = request.GET.get('nombre', '')
+    estado = request.GET.get('estado', '')
+    
     dispositivos = DeviceModel.objects.select_related('bodega').all().order_by('id')  # Obtén los datos
+    
+    if nombre:
+        dispositivos = dispositivos.filter(nombre__icontains=nombre)  # Filtrar por nombre, caso insensible
+    if estado:
+        dispositivos = dispositivos.filter(estado=estado)  # Filtrar por tipo de descripción
+        
+    
+    
     paginator = Paginator(dispositivos, 10) # Configura el paginador para 10 registros por página
     page_number = request.GET.get('page', 1) # Obtén el número de página actual de la solicitud GET
     page_obj = paginator.get_page(page_number)  # Obtén la página correspondiente
     return render(request, 'listado.html', {'page_obj': page_obj})  # Solo pasamos 'page_obj'
-
 
 @login_required
 @permission_required('dispositivo.visualizar_listado', raise_exception=True)

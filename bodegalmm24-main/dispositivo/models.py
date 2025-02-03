@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 # Create your models here.
 class Bodega(models.Model):
@@ -13,10 +14,11 @@ class DeviceModel(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     bodega = models.ForeignKey(Bodega, on_delete=models.CASCADE, related_name='producto', null=True)
     descripcion = models.TextField()
-    stock = models.PositiveIntegerField()
-    serial = models.CharField(max_length=255, unique=True)
+    stock = models.PositiveIntegerField(default=1)
+    serial = models.CharField(max_length=20, unique=True, editable=False, default="")
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
+    
     
     class Meta:
         verbose_name = "Dispositivo"
@@ -30,6 +32,7 @@ class DeviceModel(models.Model):
     
     ESTADO_CHOICES = [
         ('Disponible', 'Disponible'),
+        ('No Disponible', 'No Disponible'),
         ('Prestado', 'Prestado'),
         ('Mantenimiento', 'Mantenimiento'),
     ]
@@ -44,20 +47,16 @@ class DeviceModel(models.Model):
         self.save()
         
     def save(self, *args, **kwargs):
-        if not self.serial:
+        if not self.serial:  # Generar solo si no existe
             self.serial = self.generar_numero_serie()
         super().save(*args, **kwargs)
 
     def generar_numero_serie(self):
-        # Generar un número secuencial a partir de la cantidad de dispositivos en la base de datos
-        ultimo_dispositivo = DeviceModel.objects.last()  # Último dispositivo guardado
-        if ultimo_dispositivo:
-            # Si hay dispositivos, el nuevo número de serie será el siguiente
-            siguiente_numero = int(ultimo_dispositivo.serial.split("-")[-1]) + 1
-        else:
-            # Si no hay dispositivos, comienza desde 1
-            siguiente_numero = 1
-        return f"SN-{siguiente_numero}"
+        return f"DISP-{uuid.uuid4().hex[:12].upper()}"  # Ejemplo: DISP-A1B2C3D4E5F6
+    class Meta:
+        permissions = [
+            ("visualizar_listado", "Puede visualizar el listado de productos"),
+        ]
         
     def __str__(self):
         return f"{self.nombre} ({self.serial})"

@@ -19,6 +19,7 @@
             <p class="lead text-muted">Tu orden, nuestro trabajo..</p>
         </div>
 
+        
         <div class="container my-5">
             <div class="row justify-content-center">
                 <div class="col-md-4 mb-4">
@@ -27,7 +28,7 @@
                             class="card-img-top" style="height: 300px; object-fit: cover;" alt="Producto 1" >
                         <div class="card-body text-center">
                             <h5 class="card-title">Usuarios Activos</h5>
-                            <p class="card-text text-muted">Listado 2024</p>
+                            <p class="card-text text-muted">Listado 2025</p>
                             <a href="/dispositivo/templates/listar_usuarios/" class="btn btn-success rounded-pill">Ver más</a>
                         </div>
                     </div>
@@ -43,6 +44,7 @@
                         </div>
                     </div>
                 </div>
+                {% if not user.is_authenticated %}
                 <div class="col-md-4 mb-4">
                     <div class="card shadow">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL6DCVHIxGBDctSUhHn4CCEF9yx-mR9jp3_w&s"
@@ -54,6 +56,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
 

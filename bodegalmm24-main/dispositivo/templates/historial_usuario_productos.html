@@ -10,8 +10,11 @@
             <thead class="table-success">
                 <tr>
                     <th>#</th>
+                    <th>Solicitado por</th>
+                    <th>Autorizado por</th>
                     <th>Producto</th>
                     <th>Descripción</th>
+                    <th>Tipo</th>
                     <th>Bodega</th>
                     <th>Cantidad</th>
                     <th>Fecha del Préstamo</th>
@@ -21,8 +24,11 @@
                 {% for prestamo in page_obj %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
+                    <td>{{ prestamo.usuario_destino  }}</td>
+                    <td>{{ prestamo.usuario.username }}</td>
                     <td>{{ prestamo.producto.nombre }}</td>
                     <td>{{ prestamo.producto.descripcion }}</td>
+                    <td>{{ prestamo.producto.tipo_descripcion }}</td>
                     <td>{{ prestamo.producto.bodega.nombre }}</td>
                     <td>{{ prestamo.cantidad }}</td>
                     <td>{{ prestamo.fecha_prestamo|date:"d/m/Y H:i" }}</td>

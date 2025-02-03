@@ -25,7 +25,8 @@ class DeviceForm(forms.ModelForm):
     # specify the name of model to use 
     class Meta: 
         model = DeviceModel 
-        fields = ['nombre', 'precio', 'bodega', 'descripcion', 'stock', 'serial', 'estado',]
+        fields = ['nombre', 'precio', 'bodega', 'descripcion', 'stock', 'estado',]
+        exclude = ['serial']
         bodega = forms.ModelChoiceField(
         queryset=Bodega.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'})  # Aplica la clase 'form-control'
