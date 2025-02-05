@@ -7,6 +7,10 @@
 <div class="container mt-5">
     <h1 class="text-center text-success" data-aos="fade-slide-up" data-aos-duration="2000">Imágenes de <b>Usuarios</b></h1>
 
+    <div class="text-end mt-4">
+        <a href="{% url 'importar_usuarios' %}" class="btn btn-outline-success btn-lg px-4 py-2 rounded-pill"><b>Importar Usuarios</b></a>
+    </div>
+
     {% if imagenes %}
     <div class="row g-4">
         {% for imagen in imagenes %}

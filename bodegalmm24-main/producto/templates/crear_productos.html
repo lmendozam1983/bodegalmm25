@@ -4,6 +4,9 @@
 {% include "menu.html" %}
 <div class="container mt-5">
     <h1 class="text-center text-success" data-aos="fade-slide-up" data-aos-duration="2000">Crear <b>Producto</b></h1>
+    <div class="text-end mt-4">
+        <a href="{% url 'cargar_productos_excel' %}" class="btn btn-outline-success btn-lg px-4 py-2 rounded-pill"><b>Importar desde Excel</b></a>
+    </div>
     <form method="POST">
         {% csrf_token %}
         <div class="mb-3">

@@ -11,7 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import user_passes_test
-
+import pandas as pd
 
 # Local Proyecto Django
 from .forms import DeviceForm
@@ -287,3 +287,39 @@ from django.contrib.auth.views import PasswordResetView
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'registration/password_reset_email.html'
     email_template_name = 'registration/password_reset_email.html'
+    
+@login_required
+@permission_required('dispositivo.visualizar_listado', raise_exception=True)
+def importar_usuarios_excel(request):
+    if request.method == 'POST' and request.FILES.get('archivo_excel'):
+        archivo = request.FILES['archivo_excel']
+
+        try:
+            df = pd.read_excel(archivo, engine='openpyxl')
+
+            # Validar que el archivo tenga las columnas requeridas
+            columnas_requeridas = {'username', 'email', 'first_name', 'last_name', 'password'}
+            if not columnas_requeridas.issubset(df.columns):
+                messages.error(request, "El archivo no tiene las columnas requeridas.")
+                return redirect('importar_usuarios')
+
+            # Procesar cada fila
+            for _, fila in df.iterrows():
+                if User.objects.filter(username=fila['username']).exists():
+                    messages.warning(request, f"El usuario {fila['username']} ya existe. Se omitió.")
+                    continue
+
+                usuario = User(
+                    username=fila['username'],
+                    email=fila['email'],
+                    first_name=fila['first_name'],
+                    last_name=fila['last_name'],
+                )
+                usuario.set_password(fila['password'])  # Encriptar la contraseña
+                usuario.save()
+
+            messages.success(request, "Usuarios importados correctamente.")
+        except Exception as e:
+            messages.error(request, f"Error al procesar el archivo: {e}")
+
+    return render(request, 'importar_usuarios.html')

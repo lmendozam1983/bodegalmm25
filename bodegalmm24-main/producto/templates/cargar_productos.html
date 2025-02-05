@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% include "menu.html" %}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h1 class="text-center mb-4 text-success " data-aos="fade-slide-up" data-aos-duration="2000">📂 Cargar Productos desde Excel</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="d-grid">
+            <button type="submit" class="btn btn-success btn-lg rounded-pill">
+                <i class="fas fa-upload"></i> Cargar Archivo
+            </button>
+        </div>
+    </form>
+</div>
+
+</div>
+{% include "footer.html" %}
+{% endblock %}
+
+

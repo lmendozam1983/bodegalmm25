@@ -16,4 +16,6 @@ class SolicitudProductoForm(forms.ModelForm):
     }))
     cantidad = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control mb-3'}))
 
-    
+
+class ExcelUploadForm(forms.Form):
+    archivo = forms.FileField(label="Subir archivo Excel")

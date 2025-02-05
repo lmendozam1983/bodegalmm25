@@ -17,6 +17,8 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from datetime import timedelta
 from .models import Producto, Bodega
+import pandas as pd
+from .forms import ExcelUploadForm
 
 
 # Create your views here.
@@ -287,3 +289,45 @@ def generar_voucher(request, notificacion_id):
         'prestamos': prestamo
     }
     return render(request, 'voucher.html', context)
+@login_required
+@permission_required('dispositivo.visualizar_listado', raise_exception=True)
+def cargar_productos_excel(request):
+    if request.method == "POST":
+        form = ExcelUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            archivo = request.FILES["archivo"]
+            try:
+                # Leer el archivo Excel
+                df = pd.read_excel(archivo, engine='openpyxl')
+
+                # Validar que las columnas necesarias existan
+                columnas_requeridas = {"nombre", "descripcion", "cantidad", "precio_unitario", "fecha_ingreso", "bodega_id", "tipo_descripcion"}
+                if not columnas_requeridas.issubset(df.columns):
+                    print("Columnas detectadas:", df.columns)  # Agrega esta línea
+                    messages.error(request, "El archivo no tiene las columnas requeridas.")
+                    return redirect("cargar_productos_excel")
+
+                # Insertar datos en la base de datos
+                productos_creados = 0
+                for _, row in df.iterrows():
+                    Producto.objects.create(
+                    nombre=row["nombre"],
+                    descripcion=row["descripcion"],
+                    cantidad=row["cantidad"],
+                    precio_unitario=row["precio_unitario"],
+                    fecha_ingreso=row["fecha_ingreso"],
+                    bodega_id=row["bodega_id"],
+                    tipo_descripcion=row["tipo_descripcion"],
+                    )
+                    productos_creados += 1
+
+                messages.success(request, f"Se han cargado {productos_creados} productos correctamente.")
+                return redirect("cargar_productos_excel")
+
+            except Exception as e:
+                messages.error(request, f"Error al procesar el archivo: {str(e)}")
+    
+    else:
+        form = ExcelUploadForm()
+    
+    return render(request, "cargar_productos.html", {"form": form})

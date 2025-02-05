@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include "menu.html" %}
+<div class="container mt-5">
+    <h1 class="text-center text-success" data-aos="fade-slide-up" data-aos-duration="2000">Importar <b>Usuarios</b></h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="archivo_excel" class="form-label">Subir archivo Excel:</label>
+            <input type="file" name="archivo_excel" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success rounded-pill">Importar Usuarios</button>
+    </form>
+</div>
+{% include "footer.html" %}
+{% endblock %}
