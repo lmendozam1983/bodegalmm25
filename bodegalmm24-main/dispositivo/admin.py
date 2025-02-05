@@ -1,25 +1,31 @@
 from django.contrib import admin
-from .models import DeviceModel, ImagenUsuario, Bodega, User
+from .models import DeviceModel, ImagenUsuario, Bodega, User #Profile
 from .forms import CustomUserCreationForm
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
 # Register your models here.
 
-class CustomUserCreationForm(UserAdmin):
-    add_form = CustomUserCreationForm
-    
+#class ProfileInline(admin.StackedInline):
+    #model = Profile
+    #can_delete = False
+    #verbose_name_plural = "Perfil"
+
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm  # Usa el nuevo formulario en la creación de usuarios
     add_fieldsets = (
         (None, {
-            "classes": ("wide",),
-            "fields": ("username", "email", "first_name", "last_name", "password1", "password2"),
+            'classes': ('wide',),
+            'fields': ('username', 'rut', 'email', 'first_name', 'last_name', 'password1', 'password2'),
         }),
     )
+    #inlines = [ProfileInline]
     
     list_display = ("username", "email", "first_name", "last_name", "is_staff")
     search_fields = ("username", "email", "first_name", "last_name")
     
 admin.site.unregister(User)
-admin.site.register(User, CustomUserCreationForm)
+admin.site.register(User, CustomUserAdmin)
 
 class DeviceAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'precio', 'descripcion', 'stock')  # Muestra el campo dinámico en la lista

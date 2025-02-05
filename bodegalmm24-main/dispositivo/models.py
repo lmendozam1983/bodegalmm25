@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.core.exceptions import ValidationError
+import re
 
 # Create your models here.
 class Bodega(models.Model):
@@ -79,6 +81,12 @@ class PrestamoModel(models.Model):
     def __str__(self):
         return f"Préstamo de {self.dispositivo.nombre} a {self.usuario.username}"
 
+
+def validar_rut(value):
+    """ Valida que el RUT tenga el formato correcto. """
+    if not re.match(r'^\d{1,2}\.?\d{3}\.?\d{3}-[\dkK]$', value):
+        raise ValidationError('El RUT ingresado no es válido. Debe tener el formato XXXXXXXX-X.')
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     foto_perfil = models.ImageField(upload_to='fotos_perfil/', null=True, blank=True)
@@ -86,7 +94,8 @@ class Profile(models.Model):
     telefono = models.CharField(max_length=15, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     departamento = models.CharField(max_length=255, blank=True, null=True)
-
+    rut = models.CharField(max_length=12, unique=True, validators=[validar_rut])  # Nuevo campo
+    
     def __str__(self):
         return self.user.username
     

@@ -41,11 +41,24 @@
 
                 <!-- Correo Electrónico -->
                 <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="{{ form.rut.id_for_label }}" class="form-label fw-semibold"><b>Rut</b></label>
+                        {{ form.rut }}
+                    
+                        <!-- Mostrar error si el campo está vacío -->
+                        {% if form.rut.errors %}
+                            <div class="text-danger">
+                                {% for error in form.rut.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
                 <div class="col-md-6 mb-3">
                     <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold"><b>Correo Electrónico</b></label>
                     {{ form.email|add_class:"form-control rounded-3 shadow-sm" }}
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="mb-3">
                     <label for="{{ form.departamento.id_for_label }}" class="form-label fw-semibold"><b>Departamento</b></label>
                     {{ form.departamento|add_class:"form-control rounded-3 shadow-sm" }}
                 </div>

@@ -7,19 +7,44 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Profile, Bodega
 from django.forms.widgets import ClearableFileInput
 from django.utils.safestring import mark_safe
+from django.contrib.auth.models import User
+from .models import Profile
+import re  # Agrega esta línea
+
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Correo Electrónico")
-    
+    rut = forms.CharField(
+        required=True,
+        label="RUT",
+        max_length=12,
+        help_text="Ingrese su RUT en formato XX.XXX.XXX-X o XXXXXXXX-X."
+    )
+
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
-        
-        def clean_email(self):
-            email = self.cleaned_data.get("email")
-            if User.objects.filter(email=email).exists():
-                raise forms.ValidationError("Este correo electrónico ya está en uso.")
-            return email
+        fields = ('username', 'rut', 'email', 'first_name', 'last_name', 'password1', 'password2')
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Este correo electrónico ya está en uso.")
+        return email
+
+    def clean_rut(self):
+        rut = self.cleaned_data.get("rut")
+        if not re.match(r'^\d{1,2}\.?\d{3}\.?\d{3}-[\dkK]$', rut):
+            raise forms.ValidationError("El RUT ingresado no es válido. Debe tener el formato XX.XXX.XXX-X o XXXXXXXX-X.")
+        if Profile.objects.filter(rut=rut).exists():
+            raise forms.ValidationError("Este RUT ya está registrado.")
+        return rut
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            Profile.objects.create(user=user, rut=self.cleaned_data["rut"])
+        return user
 
 class DeviceForm(forms.ModelForm): 
     # specify the name of model to use 
@@ -117,7 +142,7 @@ class EditarPerfilForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['foto_perfil', 'first_name', 'last_name', 'email', 'telefono', 'direccion', 'bio', 'departamento']
+        fields = ['foto_perfil', 'first_name', 'last_name', 'email', 'telefono', 'direccion', 'bio', 'departamento', 'rut']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -126,7 +151,14 @@ class EditarPerfilForm(forms.ModelForm):
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
             'bio': forms.TextInput(attrs={'class': 'form-control'}),
             'departamento': forms.TextInput(attrs={'class': 'form-control'}),
+            'rut': forms.TextInput(attrs={'class': 'form-control'}),  # Agrega la clase 'form-control' al campo 'rut'  # Agrega la clase 'form-control' al campo 'rut'  # Agrega la clase 'form-control' al campo 'rut'  # Agrega la clase 'form-control' al campo 'rut'  # Agrega la clase 'form-control' al campo '
         }
+        
+    def clean_rut(self):
+        rut = self.cleaned_data.get("rut")
+        if not rut:
+            raise forms.ValidationError("El campo RUT es obligatorio.")
+        return rut
 
     def __init__(self, *args, **kwargs):
         super(EditarPerfilForm, self).__init__(*args, **kwargs)
