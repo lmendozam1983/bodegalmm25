@@ -94,7 +94,7 @@ class Profile(models.Model):
     telefono = models.CharField(max_length=15, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     departamento = models.CharField(max_length=255, blank=True, null=True)
-    rut = models.CharField(max_length=12, unique=True, validators=[validar_rut])  # Nuevo campo
+    rut = models.CharField(max_length=12, unique=True, validators=[validar_rut], null=True, blank=True)# Nuevo campo
     
     def __str__(self):
         return self.user.username

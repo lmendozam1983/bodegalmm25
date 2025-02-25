@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import user_passes_test
 import pandas as pd
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 # Local Proyecto Django
 from .forms import DeviceForm
@@ -23,6 +25,8 @@ from .forms import PrestamoForm
 from .forms import EditarPerfilForm  
 from .models import ImagenUsuario
 from producto.models import Prestamo
+
+
 
 
 # Create your views here.
@@ -323,3 +327,16 @@ def importar_usuarios_excel(request):
             messages.error(request, f"Error al procesar el archivo: {e}")
 
     return render(request, 'importar_usuarios.html')
+
+def cambiar_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Mantiene la sesión activa después del cambio de clave
+            messages.success(request, 'Tu contraseña ha sido cambiada con éxito.')
+            return redirect('perfil')  # Redirigir a la vista de perfil
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    return render(request, 'cambiar_password.html', {'form': form})
