@@ -7,6 +7,18 @@ import uuid
 # Create your models here.
 class Bodega(models.Model):
     nombre = models.CharField(max_length=255, unique=True)
+    
+    DESCRIPCION_CHOICES = [
+        ('Pañol', 'Pañol'),
+        ('Bodega Audio', 'Bodega Audio'),
+    ]
+
+    tipo_bodega = models.CharField(
+        max_length=50,
+        choices=DESCRIPCION_CHOICES,
+        verbose_name="Tipo de bodega",
+        blank=True,
+    )
 
     def __str__(self):
         return self.nombre
@@ -19,6 +31,8 @@ class Producto(models.Model):
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Precio unitario")
     fecha_ingreso = models.DateField(auto_now_add=True, verbose_name="Fecha de ingreso")
     numero_serie = models.CharField(max_length=20, unique=True, editable=False, default="")
+    imagen = models.ImageField(upload_to='productos/', default='productos/default-placeholder.png')
+
     
     DESCRIPCION_CHOICES = [
         ('Aseo', 'Aseo'),

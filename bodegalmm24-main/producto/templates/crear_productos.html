@@ -7,8 +7,11 @@
     <div class="text-end mt-4">
         <a href="{% url 'cargar_productos_excel' %}" class="btn btn-outline-success btn-lg px-4 py-2 rounded-pill"><b>Importar desde Excel</b></a>
     </div>
-    <form method="POST">
+    
+    <!-- Asegúrate de agregar enctype="multipart/form-data" -->
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        
         <div class="mb-3">
             <label for="nombre" class="form-label"><b>Nombre</b></label>
             <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -17,7 +20,6 @@
             <label for="numero_serie" class="form-label"><b>Número de Serie</b></label>
             <input type="text" class="form-control" id="numero_serie" name="numero_serie" readonly>
         </div>
-        
         <div class="mb-3">
             <label for="cantidad" class="form-label"><b>Cantidad</b></label>
             <input type="number" class="form-control" id="cantidad" name="cantidad" required>
@@ -51,8 +53,16 @@
                 <option value="toner_tintas">TONER Y TINTAS</option>
             </select>
         </div>
+        
+        <!-- Nuevo campo para la imagen -->
+        <div class="mb-3">
+            <label for="imagen" class="form-label"><b>Imagen del Producto</b></label>
+            <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+        </div>
+        
         <button type="submit" class="btn btn-success rounded-pill"><b>Guardar</b></button>
     </form>
 </div>
+
 {% include "footer.html" %}
 {% endblock %}

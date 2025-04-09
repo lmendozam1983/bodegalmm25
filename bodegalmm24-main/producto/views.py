@@ -24,16 +24,20 @@ from .forms import ExcelUploadForm
 # Create your views here.
 def lista_productos(request):
     # Obtener los filtros desde el formulario (GET)
-    nombre = request.GET.get('nombre', '')
-    tipo_descripcion = request.GET.get('tipo_descripcion', '')
+    nombre = request.GET.get('nombre')
+    tipo_bodega = request.GET.get('bodega')
+    tipo_descripcion = request.GET.get('tipo_descripcion')
 
-    # Filtrar los productos según los criterios de búsqueda
     productos = Producto.objects.all()
 
     if nombre:
-        productos = productos.filter(nombre__icontains=nombre)  # Filtrar por nombre, caso insensible
+        productos = productos.filter(nombre__icontains=nombre)
+
+    if tipo_bodega:
+        productos = productos.filter(bodega__nombre=tipo_bodega)
+
     if tipo_descripcion:
-        productos = productos.filter(tipo_descripcion=tipo_descripcion)  # Filtrar por tipo de descripción
+        productos = productos.filter(tipo_descripcion=tipo_descripcion)
 
     # Configura la paginación
     paginator = Paginator(productos, 10)  # 10 productos por página
@@ -44,7 +48,8 @@ def lista_productos(request):
     return render(request, 'lista_productos.html', {
         'page_obj': page_obj,
         'nombre': nombre,
-        'tipo_descripcion': tipo_descripcion
+        'tipo_bodega' : tipo_bodega,
+        'tipo_descripcion': tipo_descripcion,
     })
 
 
@@ -331,3 +336,6 @@ def cargar_productos_excel(request):
         form = ExcelUploadForm()
     
     return render(request, "cargar_productos.html", {"form": form})
+
+
+

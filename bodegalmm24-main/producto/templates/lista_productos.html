@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 
 {% include "menu.html" %}
 <!-- Agregando el CSS de AOS -->
@@ -84,14 +85,21 @@
 </div>
 
 <div class="container my-5">
-    <h1 class="text-center mb-4 text-success " data-aos="fade-slide-up" data-aos-duration="2000">Lista de <b>Productos</b></h1>
+    <h1 class="text-center mb-4 text-success" data-aos="fade-slide-up" data-aos-duration="2000">Lista de <b>Productos</b></h1>
 
     <form method="GET" class="mb-3">
-        <div class="row">
-            <div class="col-md-4">
+        <div class="row d-flex align-items-center">
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
                 <input type="text" class="form-control" name="nombre" placeholder="Filtrar por nombre" value="{{ nombre }}">
             </div>
-            <div class="col-md-4">
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                <select class="form-control" name="bodega">
+                    <option value="">Seleccione bodega</option>
+                    <option value="Pañol" {% if tipo_bodega == "Pañol" %}selected{% endif %}>PAÑOL</option>
+                    <option value="Bodega Audio" {% if tipo_bodega == "Bodega Audio" %}selected{% endif %}>BODEGA AUDIO</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
                 <select class="form-control" name="tipo_descripcion">
                     <option value="">Seleccione tipo de producto</option>
                     <option value="aseo" {% if tipo_descripcion == "aseo" %}selected{% endif %}>ASEO</option>
@@ -103,48 +111,46 @@
                     <option value="toner_tintas" {% if tipo_descripcion == "toner_tintas" %}selected{% endif %}>TONER Y TINTAS</option>
                 </select>
             </div>
-            <div class="col-md-4">
-                <button type="submit" class="btn btn-primary ">Filtrar</button>
+            <div class="col-12 col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
             </div>
         </div>
     </form>
+    
 
-    <!-- Tabla de productos -->
-    <table class="table table-striped table-bordered">
-        <thead class="table-success">
-            <tr>
-                <th><b>Nombre</b></th>
-                <th><b>Código</b></th>
-                <th><b>Descripción</b></th>
-                <th><b>Tipo</b></th>
-                <th><b>Bodega</b></th>
-                <th><b>Cantidad</b></th>
-                <th><b>Acciones</b></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for producto in page_obj %}
-            <tr>
-                <td style="width: 10%">{{ producto.nombre }}</td>
-                <td style="width: 13%">{{ producto.numero_serie }}</td>
-                <td style="width: 5%">{{ producto.descripcion}}</td>
-                <td style="width: 5%">{{ producto.tipo_descripcion}}</td>
-                <td style="width: 5%">{{ producto.bodega.nombre}}</td>
-                <td style="width: 5%"><b>{{ producto.cantidad }}</b></td>
-                <td style="width: 57%">
+    <!-- Nueva estructura en tarjetas -->
+    <div class="row">
+        {% for producto in page_obj %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <!-- Imagen del producto -->
+                {% if producto.imagen and producto.imagen.url %}
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'img/default-placeholder.png' %}" class="card-img-top" alt="Imagen no disponible" style="height: 200px; object-fit: cover;">
+                {% endif %}
 
-                {% if user.is_authenticated and perms.producto.editar_prestamo %}
-                    <a href="{% url 'prestar_producto' producto.id %}" class="btn btn-success btn-m rounded-pill me-2"><b>Prestar</b></a>
-                    <a href="{% url 'prestamos_producto' producto.id %}" class="btn btn-info btn-m rounded-pill me-2"><b>Movimientos</b></a>
-                    <a href="{% url 'agregar_stock' producto.id %}" class="btn btn-dark btn-m rounded-pill"><b>Agregar stock</b></a>
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ producto.nombre }}</h5>
+                    <p class="card-text"><b>Código:</b> {{ producto.numero_serie }}</p>
+                    <p class="card-text"><b>Descripción:</b> {{ producto.descripcion }}</p>
+                    <p class="card-text"><b>Tipo:</b> {{ producto.tipo_descripcion }}</p>
+                    <p class="card-text"><b>Bodega:</b> {{ producto.bodega.nombre }}</p>
+                    <p class="card-text"><b>Cantidad:</b> <span class="badge bg-success">{{ producto.cantidad }}</span></p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    {% if user.is_authenticated and perms.producto.editar_prestamo %}
+                        <a href="{% url 'prestar_producto' producto.id %}" class="btn btn-success btn-sm">Prestar</a>
+                        <a href="{% url 'prestamos_producto' producto.id %}" class="btn btn-info btn-sm">Movimientos</a>
+                        <a href="{% url 'agregar_stock' producto.id %}" class="btn btn-dark btn-sm">Stock</a>
                     {% endif %}
-                    <a href="{% url 'solicitar_producto' producto.id %}" class="btn btn-warning rounded-pill"><b>Solicitar</b></a>
-                    <a href="{% url 'listar_notificaciones' %}" class="btn btn-primary rounded-pill"><b>Revisar solicitudes</b></a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    <a href="{% url 'solicitar_producto' producto.id %}" class="btn btn-warning btn-sm">Solicitar</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
@@ -163,6 +169,7 @@
         </span>
     </div>
 </div>
+
 {% include "footer.html" %}
 <!-- Agregando AOS.js -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
